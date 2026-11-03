@@ -1,0 +1,68 @@
+# CSC 869 MP2 -- Python experiment configuration
+#
+# Paths are resolved relative to the repository root, so the commands work from
+# components/mp2-py as well as from the repository root.
+
+seed: 42
+n_splits: 5
+
+data:
+  train: data/adult/adult.data
+  test: data/adult/adult.test
+
+folds: data/folds.json
+results_dir: results
+figures_dir: reports/figures
+
+missing:
+  # unknown | mode
+  categorical: unknown
+  # median | indicator (Adult has no missing numeric values; the two are
+  # identical in practice and the report says so rather than faking missingness)
+  numeric: indicator
+  # add capital-gain>0 / capital-loss>0 flags (off by default; the raw values
+  # are kept because trees use their exact split points)
+  capital_flags: false
+
+scenarios:
+  - none
+  - upsampling
+  - downsampling
+
+models:
+  - decision_tree
+  - random_forest
+  - logistic_regression
+  - svm
+  - knn
+
+cv:
+  inner_splits: 3
+  dt_depths: [3, 5, 7, 10, null]
+  learning_fractions: [0.1, 0.25, 0.5, 0.75, 1.0]
+  learning_folds: 1
+  # CV curves use SVM decision-function margins for speed; the final test model
+  # is Platt-calibrated (see test.svm_probability).
+  svm_probability: false
+  rf_trees: 300
+  knn_neighbors: 5
+  # 1 = sequential; >1 parallelises (scenario, fold) tasks with joblib
+  jobs: 1
+
+test:
+  # Platt/sigmoid calibration for the SVM final test models
+  svm_probability: true
+
+error_analysis:
+  # scenario used for the pairwise-agreement heatmap
+  scenario: none
+  n_pos: 100
+  n_neg: 100
+  sample_seed: 42
+
+quick:
+  folds: 2
+  rf_trees: 40
+  dt_depths: [5]
+  learning_fractions: [0.25, 1.0]
+  max_rows: 8000
