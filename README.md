@@ -1,8 +1,9 @@
-# CSC 869 Mini Project 2 — Python implementation
+# CSC 869 Mini Project 2 — Python and native Rust
 
 Imbalanced-data study on the UCI **Census Income / Adult** dataset. This
-repository contains the full Python experiment matrix required by the MP2
-brief; the Rust implementation is intentionally left for the second component.
+repository contains the full Python experiment matrix and a native Rust workspace
+component. The Rust CV/test CLI and differential harness are documented in
+[`components/mp2-rust/README.md`](components/mp2-rust/README.md).
 
 ## What is implemented
 
@@ -260,6 +261,26 @@ Rust reads the same `data/folds.json` and writes the same tidy CSV schema. A
 small `pyo3` bridge is a nice extension if you want to compare a Rust
 preprocessing pipeline against sklearn, but it should not replace the Rust
 implementation of the five classifiers.
+
+## Native Rust build and run
+
+From the repository root:
+
+```bash
+nix develop .#mp2-rust --command cargo build --release
+./target/release/csc869 --data data/ --folds data/folds.json --out results/rust/
+# Quick frozen-fold parity profile; does not alter data or reports:
+./target/release/csc869 --data data/ --folds data/folds.json --out results_quick/rust/ --quick
+```
+
+The full command uses all five existing outer folds, 300 forest trees and
+three-fold Platt calibration for final-test SVMs. The quick command uses
+40 trees/depth 5 and projects the first two original frozen folds onto the
+first 8,000 source rows; it deliberately does not regenerate folds or claim
+the stock Python quick profile uses that same partition. See the component
+README for the unchanged-Python reference harness, per-cell comparison,
+metric definitions and numerical-parity limitations. The Rust binary never
+invokes Python.
 
 ## Data
 
