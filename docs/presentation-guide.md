@@ -268,7 +268,7 @@ runs."* See `data.rs:76` `validate` and `main.rs:153`.
 so the caller keeps control of the train/validation boundary.
 
 ```python
-# sampling.py:44-52
+# sampling.py:43-52
 elif scenario == "upsampling":
     target = max(len(pos), len(neg))
     if len(pos) < target:
@@ -359,7 +359,7 @@ tasks = [
 ]
 ```
 
-15 tasks, each running all five models → 75 fits. Parallelised with joblib at `cv.py:320`
+15 tasks, each running all five models → 75 fits. Parallelised with joblib at `cv.py:321`
 (`--jobs 4` = four tasks at a time); each task is independent precisely because the folds are
 precomputed.
 
