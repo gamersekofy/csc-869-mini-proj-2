@@ -196,6 +196,7 @@ The quick profile runs in ~1–2 minutes.
 | `reports/slides_script.md` | Verbatim 7-minute presentation script with per-slide timings and a cut list. |
 | `reports/slides_notes.md` | Glance sheet: cue-card bullets per slide, plus Q&A prep. |
 | `docs/presentation-guide.md` | Talk script, "where is X" code tour with file:line refs, and FAQ. |
+| `docs/demo-runbook.md` | Live-demo commands for both languages, output interpretation, fallbacks. |
 
 ## Design notes / traps avoided
 

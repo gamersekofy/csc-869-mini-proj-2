@@ -435,7 +435,7 @@ writes `parity_cv_tidy.csv` / `parity_means.csv`.
 ## 8. Live demo runbook
 
 Seven minutes of talk (script: `reports/slides_script.md`), then the code walk-through if he asks
-for one. Do not open a random file because you were asked "where does the
+for one. The live-demo commands and output interpretation are in `docs/demo-runbook.md`. Do not open a random file because you were asked "where does the
 splitting happen" — that is section 7.2.
 
 1. **Deck (0:00–4:15).** Slides 2 → 5 → 9 → 12. Problem, headline, test check, parity. Skip the
