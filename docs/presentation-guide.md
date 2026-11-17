@@ -1,6 +1,7 @@
 # CSC 869 Mini Project 2 — Presentation Guide
 
-Working notes for the 5-minute talk plus the code walk-through. Everything here is
+Working notes for the 7-minute talk plus the code walk-through. The verbatim script is
+`reports/slides_script.md`; this file is the reference behind it. Everything here is
 either measured on this repo or a direct pointer to the line that proves it. If a
 number is not in here, do not improvise it during the talk.
 
@@ -433,17 +434,18 @@ writes `parity_cv_tidy.csv` / `parity_means.csv`.
 
 ## 8. Live demo runbook
 
-Five minutes, in this order. Do not open a random file because you were asked "where does the
+Seven minutes of talk (script: `reports/slides_script.md`), then the code walk-through if he asks
+for one. Do not open a random file because you were asked "where does the
 splitting happen" — that is section 7.2.
 
-1. **Deck (0:00–3:00).** Slides 2 → 5 → 9 → 12. Problem, matrix, test check, parity. Skip the
+1. **Deck (0:00–4:15).** Slides 2 → 5 → 9 → 12. Problem, headline, test check, parity. Skip the
    figure slides if short on time; the numbers carry the argument.
-2. **`kfold.py:40` (3:00–3:40).** The stratified split. This is the question that got asked in
+2. **`kfold.py:40` (4:15–4:55).** The stratified split. This is the question that got asked in
    MP1 and will be asked again.
-3. **`cv.py:62` (3:40–4:20).** Resample → fit preprocessor → transform validation, in that
+3. **`cv.py:62` (4:55–5:40).** Resample → fit preprocessor → transform validation, in that
    order. Point at the three leak boundaries.
-4. **`main.rs:194` (4:20–4:45).** The same loop in Rust, same seeds, reading the same folds.
-5. **Close (4:45–5:00).** Recommendation + the honest limitation: full Rust sweep not run.
+4. **`main.rs:194` (5:40–6:30).** The same loop in Rust, same seeds, reading the same folds.
+5. **Close (6:30–7:00).** Recommendation + the honest limitation: full Rust sweep not run.
 
 Backup tabs to have open but not shown unless asked: `models.py:76`, `metrics.py:55`,
 `error_analysis.py:213`.

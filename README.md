@@ -192,7 +192,9 @@ The quick profile runs in ~1–2 minutes.
 | `reports/report.md` | Generated Markdown report with every table and figure. |
 | `reports/report.typ` | Generated Typst source (same numbers, print layout). |
 | `reports/report.pdf` | Typeset report compiled by Typst: title page, contents, 6 numbered body pages. |
-| `reports/slides.pdf` | 13-slide 16:9 deck; `slides.typ` is hand-written, `slides_notes.md` is the 5-minute cue card. |
+| `reports/slides.pdf` | 13-slide 16:9 deck; `slides.typ` is hand-written. |
+| `reports/slides_script.md` | Verbatim 7-minute presentation script with per-slide timings and a cut list. |
+| `reports/slides_notes.md` | Glance sheet: cue-card bullets per slide, plus Q&A prep. |
 | `docs/presentation-guide.md` | Talk script, "where is X" code tour with file:line refs, and FAQ. |
 
 ## Design notes / traps avoided
