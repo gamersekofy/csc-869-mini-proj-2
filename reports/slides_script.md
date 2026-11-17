@@ -2,184 +2,208 @@
 
 Deck: `reports/slides.pdf` — 13 slides, 16:9. **Allocation: 7:00.**
 
-About 1,000 spoken words: roughly 6:40 of speech at a normal pace, leaving ~20 s for pointing at
-figures and pausing. Rehearse it once out loud with a timer; if you land under 6:30 you're rushing.
+Blockquotes are what you say. [Square brackets] are stage directions — never spoken. Bold marks the
+one sentence per slide that has to land; if you lose your place, find the bold line and work
+backward from it.
 
-How to use this: blockquoted text is what you say, close to verbatim. Anything in [square brackets]
-is a stage direction and is never spoken. Bold is the sentence that has to land — if you lose your
-place, find the bold line and work back from it.
+Each slide opens with **On screen:** — that is your cue for what to point at, and the wording that
+follows refers to it. Don't read numbers off a slide that aren't in this script; every figure traces
+to `results/cv_summary.csv`, `results/test_metrics.csv` or the error-analysis CSVs.
 
-Do not read numbers off the slide that aren't in this script. Every figure here traces to
-`results/cv_summary.csv`, `results/test_metrics.csv` or the error-analysis CSVs. If he asks for code,
-the map is `docs/presentation-guide.md` §7.
-
----
-
-## 1 · Title — 0:00–0:15 (15 s)
-
-> This is Mini Project 2. The question is narrow: when about a quarter of the data is the class you
-> care about, does resampling actually help — or does it just move the numbers around?
-
-[Don't introduce yourself. The question is the whole opening.]
+Rehearse once out loud with a timer. The per-slide clock below is computed at 145 wpm; if you're
+running long before slide 6, the cut list at the bottom is your friend.
 
 ---
 
-## 2 · Accuracy lies — 0:15–0:55 (40 s)
+## 1 · Title — 0:00–0:17 (17 s)
 
-> This is the Adult census dataset. 32,561 training rows, 16,281 test, 24% of them earning over 50K.
+**On screen:** title, subtitle, your name.
+
+> Same dataset as MP1, different question. Last time I had to build the algorithm. This time: when
+> only a quarter of the data is the class you care about, does resampling actually help — or does it
+> just move the numbers around?
+
+---
+
+## 2 · Accuracy lies — 0:17–0:54 (37 s)
+
+**On screen:** four stat lines and the class-balance bar chart on the left, the 0.759 callout on the right.
+
+> Adult, same census data as MP1: 32,561 training rows, 16,281 test, and a quarter of them earning
+> over 50K — the short bar in that chart.
 >
-> Here's the problem. Predict "under 50K" for every single person and you score 0.759 accuracy —
-> seventy-six percent — with an F1 of zero.
+> Here's the trap that shaped everything. Predict "under 50K" for everybody and you score 0.759
+> accuracy — seventy-six percent — with an F1 of exactly zero.
 >
-> **So accuracy isn't a metric here, it's a trap.** I score F1 on the positive class, and PR-AUC
-> breaks ties because it judges the ranking rather than one threshold. ROC-AUC is in the report too,
-> and I'll show you why it's the weaker of the two.
+> **So accuracy is out.** I score F1 on the positive class and break ties with PR-AUC, because
+> PR-AUC judges the ranking instead of one threshold. ROC-AUC is in the report too; I'll show you why
+> it flatters everything.
 
 ---
 
-## 3 · Pipeline — 0:55–1:30 (35 s)
+## 3 · Pipeline — 0:54–1:35 (41 s)
+
+**On screen:** five boxes, left to right.
 
 > Five stages: clean, fold, resample, fit, score.
 >
-> Two things matter. The folds are stratified and frozen — generated once, seed 42, written to a
-> file, and both implementations read that same file. And resampling and preprocessing happen
-> **inside** the fold, on training rows only.
+> Cleaning is MP1's problem again — same two files, same junk header in `adult.test`, same trailing
+> period on test labels. That code transferred straight across.
 >
-> [Point at the resample and fit boxes.] I slice the training part, resample it, fit the encoder and
-> scaler on the resampled rows, then only *transform* the validation fold with them.
+> What's new is the middle: five stratified folds, seed 42, written to a file once, and both
+> languages read that same file. That's what makes the two-language comparison legitimate.
 >
-> **That ordering is the difference between a real 0.69 F1 and a fake 0.99.**
+> [Point at the resample box.] And resampling sits *inside* the fold — train part, resample, fit the
+> encoder on those rows, then only transform the validation fold. **Resample before splitting and you
+> get a 99% F1 that means nothing.**
 
 ---
 
-## 4 · Methods — 1:30–2:10 (40 s)
+## 4 · Methods — 1:35–2:14 (39 s)
 
-> Five models: decision tree, random forest, logistic regression, an RBF support vector machine,
-> k-nearest neighbours. Three scenarios: no resampling, upsampling the minority to parity,
-> downsampling the majority to the minority count.
+**On screen:** models on the left, scenarios on the right, the 75-fits line underneath.
+
+> Five models: decision tree, random forest, logistic regression, an RBF SVM, k-nearest neighbours.
+> Three scenarios: leave it alone, upsample the minority until the classes match, or downsample the
+> majority until they do.
 >
-> Five models, three scenarios, five folds — seventy-five fits per language, six metrics each, which
-> is where the report's 450 numbers come from.
+> Five models, three scenarios, five folds — seventy-five fits per language, six metrics each: the
+> 450 numbers in the report.
 >
-> Hyperparameters are defaults on purpose. The one exception is the tree's depth, chosen by an inner
-> three-fold search on training rows only. **Tuning everything would have turned a sampling
-> comparison into a hyperparameter competition.**
+> Defaults on purpose, except the tree's depth, tuned on an inner three-fold split of training rows
+> only. And MP1's Naive Bayes still runs: 0.833 on ten-fold, exactly the band it hit in MP1.
+> **That's how I know the cleaning didn't move underneath me.**
 
 ---
 
-## 5 · Headline result — 2:10–2:55 (45 s)
+## 5 · Headline result — 2:14–2:48 (34 s)
 
-> [Point at the three rows as you say them.] Best F1 per scenario: 0.6813 with no resampling, 0.6905
-> with upsampling, 0.6818 with downsampling.
+**On screen:** the three-row table on the left, "what actually matters" on the right.
+
+> Here's the headline, in the left-hand table. Best F1 per scenario: 0.6813 with no resampling,
+> 0.6905 with upsampling, 0.6818 with downsampling.
 >
-> **That's the result: resampling moves F1 by about one point. It doesn't rescue the minority class.**
+> Three numbers inside a point of each other. **So resampling — the thing everyone reaches for first
+> — buys about one F1 point, and it doesn't rescue the minority class.**
 >
-> What it changes is the trade. Downsampling pushes toward recall — false negatives fall from 0.41 to
-> 0.17 — while false positives rise from 0.07 to 0.21. Upsampling keeps precision and pays with
-> duplicated rows.
->
-> Model family matters more than the sampling choice: the spread between the best and worst model
-> inside one scenario is wider than the spread between scenarios for a fixed model.
+> What it changes is the trade: downsampling takes false negatives from 0.41 to 0.17 while false
+> positives rise from 0.07 to 0.21. Upsampling holds precision and pays in duplicated rows.
 
 ---
 
-## 6 · The matrix — 2:55–3:15 (20 s)
+## 6 · The matrix — 2:48–3:03 (15 s)
 
-> Same numbers, all fifteen cells. Don't read every cell, read the shape. KNN is the pale row
-> everywhere — a distance metric on mostly-categorical data. Everything else sits in a narrow band.
+**On screen:** the 5 × 3 heatmap.
+
+> Same fifteen cells as a picture. Don't read every number — read the shape. KNN is the pale row in
+> all three scenarios; everything else sits in a narrow band.
 >
-> **The narrow band is the finding.**
+> **The narrow band is the result.**
 
 ---
 
-## 7 · ROC and PR — 3:15–3:50 (35 s)
+## 7 · ROC and PR — 3:03–3:32 (29 s)
 
-> Two views of ranking. On the left, ROC: everything sits near 0.90, including models I know behave
-> differently. With a 24% positive rate, ROC is dominated by true negatives, so it can't separate them.
+**On screen:** ROC on top, PR underneath, one caption.
+
+> Two views of ranking, stacked so you can compare them.
 >
-> On the right, precision-recall, and now the differences show: PR-AUC runs from 0.47 to 0.77. Best
-> is random forest with no resampling; worst is the decision tree with upsampling.
+> Top panel, ROC: everything sits near 0.90, including models I know behave differently. At a 24%
+> positive rate ROC is dominated by true negatives, so it can't separate them.
 >
-> **ROC tells you nothing on this dataset. PR tells you everything.**
+> Bottom panel, precision-recall: now they separate. PR-AUC runs from 0.47 — decision tree,
+> upsampling — to 0.77 for random forest with no resampling.
+>
+> **ROC flatters everything here. PR tells the truth.**
 
 ---
 
-## 8 · Learning curves — 3:50–4:10 (20 s)
+## 8 · Learning curves — 3:32–3:48 (16 s)
 
-> F1 against training-set size: the curves climb fast and then flatten. Doubling the data buys almost
+**On screen:** three panels of F1 against training fraction.
+
+> F1 against training-set size. The curves climb fast, then flatten — doubling the data buys almost
 > nothing.
 >
-> **The ceiling is the signal in the features, not the sample size** — which is why I'm not going to
-> claim that more data would fix this.
+> **The ceiling is signal in the features, not the number of rows**, so I won't claim more data would
+> fix this.
 
 ---
 
-## 9 · Test set — 4:10–4:50 (40 s)
+## 9 · Test set — 3:48–4:21 (33 s)
 
-> The honest check: refit on the full training set, score the test split once.
+**On screen:** five-row table on the left, delta note on the right.
+
+> The check that matters: refit on the full training set, score the test split once.
 >
-> Test minus CV stays within plus or minus 0.017 F1 across all fifteen cells. **That's the number I
-> care about most**, because leakage shows up exactly here — inflated CV, collapsed test. There's no
-> collapse.
+> Test minus CV stays inside ±0.017 F1 across all fifteen cells. **That's the number I'd defend in an
+> interview**, because leakage shows up exactly here — inflated CV, collapsed test. No collapse.
 >
-> Best test F1 is the SVM with downsampling, 0.6837 — but that's recall 0.85 against precision 0.57.
-> Random forest with upsampling scores 0.6722 and is the only balanced one: 0.67 precision, 0.68
-> recall.
+> Best test F1 is SVM with downsampling, 0.6837 — but read its row: recall 0.85 against precision
+> 0.57. Random forest with upsampling gets 0.6722 and is the only balanced row: 0.67 and 0.68.
 
 ---
 
-## 10 · Where the errors live — 4:50–5:35 (45 s)
+## 10 · Where the errors live — 4:21–4:59 (38 s)
 
-> I took two hundred test records, a hundred per class, and looked at where the models disagree.
+**On screen:** Venn on the left, pairwise agreement matrix on the right.
+
+> Two hundred test records, a hundred per class, fixed seed — and I asked where the models disagree.
 >
-> In the no-resampling scenario the three model families are all wrong on twenty-two of them; at
-> least one family is wrong on fifty. K-nearest-neighbours is the most alone-wrong — eleven records
-> nobody else misses. **That's not a threshold problem, that's an instance-based model with no near
-> neighbour to lean on.**
+> In the no-resampling scenario all three families are wrong on twenty-two of them, and at least one
+> family misses fifty. KNN is the most alone-wrong: eleven records nobody else misses. **Not a
+> threshold problem — a model with no near neighbour to lean on.**
 >
-> And the hard core has a shape: education-num between 9 and 13 covers 91, 89 and 88 per cent of the
-> all-wrong cases. The ambiguous records are mid-education — not the zero-capital-gain group I
-> expected going in.
+> And the hard cases have a shape: education-num 9 to 13 covers 91, 89 and 88 per cent of the
+> all-wrong records. Mid-education, not the zero-capital-gain group I expected.
 
 ---
 
-## 11 · Recommendation — 5:35–6:10 (35 s)
+## 11 · Recommendation — 4:59–5:38 (39 s)
 
-> Recommendation: random forest with upsampling — best mean CV F1 at 0.6905, PR-AUC 0.7479, and the
-> only balanced operating point on the test set.
->
-> Failure mode, plainly: the probabilities aren't calibrated, so 0.5 is an arbitrary threshold;
-> duplicated rows inflate confidence on exactly the cases they duplicate; and a forest is less
-> interpretable than a tree.
->
-> Next, in order: calibrate and cost-tune the threshold, compare class weights against resampling,
-> then SMOTE and gradient boosting. SMOTE stayed out because it's Python-only here, and the
-> two-language comparison is the spine of this project.
+**On screen:** "Why" on the left, "Failure mode" on the right.
 
-[If he asks "why not logistic regression?" — it ranks better, 0.765 PR-AUC, but its F1 and its
-precision at 0.5 are lower. If you were shipping a ranking system, that's the pick instead.]
+> Random forest with upsampling: best mean CV F1 at 0.6905, PR-AUC 0.7479 as tie-breaker, sixteen
+> seconds to fit on the full resampled training set, and the only balanced row on the test set.
+>
+> The failure mode, plainly: probabilities aren't calibrated, so 0.5 is arbitrary; duplicated rows
+> inflate confidence on the cases they duplicate; and a forest is harder to explain than a tree.
+>
+> Next: calibrate and cost-tune the threshold, class weights against resampling, then SMOTE and
+> gradient boosting. SMOTE stayed out because it's Python-only here, and the two-language comparison
+> is the spine of this project.
+
+[If asked "why not logistic regression?" — best PR-AUC of the resampled options at 0.7651, but lower
+F1 and lower precision at 0.5. Pick it only for a ranking system.]
 
 ---
 
-## 12 · Two languages, one answer — 6:10–6:45 (35 s)
+## 12 · Two languages, one answer — 5:38–6:21 (43 s)
 
-> All of this also runs as a native Rust binary: same fold file, same seeds, same metric definitions.
+**On screen:** the delta table on the left, "why the residual exists" on the right.
+
+> All of this also runs as native Rust: same fold file, same resample seeds, same metric code. That
+> discipline came out of MP1 — if two implementations disagree, find out why before trusting a number.
 >
-> On the quick protocol — 8,000 rows, two folds — kNN agrees to one part in ten to the sixteenth:
-> exact, not close. SVM matches on F1 as well. Logistic regression is out by 0.0003 and the tree by
-> about a thousandth. Random forest is the loosest at 0.011 F1 on fold means, and that's per-tree
-> bootstrap randomness, not a pipeline difference.
+> On the quick protocol — 8,000 rows, two folds — kNN agrees to one part in ten to the sixteenth and
+> SVM matches on F1. Logistic regression is out by 0.0003, the tree by about a thousandth, random
+> forest by 0.011 on fold means — per-tree bootstrap randomness, not pipeline.
 >
 > **If two implementations agree cell by cell, the pipeline isn't an explanation for any result I
 > just showed you.**
 
 ---
 
-## 13 · Cost and close — 6:45–7:00 (15 s)
+## 13 · Cost and close — 6:21–6:50 (29 s)
 
-> Cost: the full Python matrix is twenty to forty minutes; the quick protocol, ninety seconds. Rust
-> does that in 114 seconds — threefold — and a full Rust sweep extrapolates to eight to fourteen
-> minutes. **I didn't run that one, so it's labelled extrapolated.** Thank you.
+**On screen:** Python column, Rust column, closing line.
+
+> Cost, for the record: twenty to forty minutes for the full Python matrix, ninety seconds on the
+> quick protocol. Rust does that in 114 seconds — threefold — and a full Rust sweep extrapolates to
+> eight to fourteen minutes. I didn't run that one, so it's labelled extrapolated.
+>
+> **Same data as MP1, one fold file, two languages, one answer: resampling is a one-point lever, not
+> a twenty-point one.** Thank you.
 
 ---
 
@@ -189,15 +213,15 @@ Glance at the slide number, not a clock.
 
 | Clock | Should be finishing | If you're past this |
 |---|---|---|
-| 0:55 | slide 2 | drop the ROC-AUC sentence on slide 2 |
-| 1:30 | slide 3 | cut "only *transform* the validation fold" |
-| 2:10 | slide 4 | cut the hyperparameter-competition line |
-| 2:55 | slide 5 | cut the FN/FP numbers, keep "one point" |
-| 3:50 | slide 7 | slide 6 is skippable in a pinch |
-| 4:50 | slide 9 | cut the balanced-precision sentence |
-| 5:35 | slide 10 | cut the education-num detail |
-| 6:10 | slide 11 | shorten next steps to "calibration, then class weights" |
-| 7:00 | slide 13 | — |
+| 0:54 | slide 2 | drop the ROC-AUC sentence |
+| 1:35 | slide 3 | drop the `adult.test` cleaning detail |
+| 2:14 | slide 4 | drop the Naive Bayes line |
+| 2:48 | slide 5 | cut the FN/FP numbers, keep "one point" |
+| 3:32 | slide 7 | slide 6 is skippable in a pinch |
+| 4:21 | slide 9 | cut the precision/recall reading |
+| 4:59 | slide 10 | cut the education-num detail |
+| 5:38 | slide 11 | shorten next steps to "calibration, then class weights" |
+| 6:50 | slide 13 (script ends; 10 s of slack to 7:00) | — |
 
 **Running long — cut in this order:** slide 8 entirely → the education-num sentence on 10 → the
 FN/FP trade on 5 → the failure-mode paragraph on 11. About 40 seconds, and the argument survives.
@@ -210,8 +234,9 @@ threshold-sensitive — re-set the cut to a business cost and the ranking change
 
 Three jumps cover what he asked for in MP1:
 
-1. `components/mp2-py/csc869/kfold.py:40` — the stratified split.
-2. `components/mp2-py/csc869/cv.py:62` — resample, fit preprocessor, transform validation, in order.
+1. `components/mp2-py/csc869/kfold.py:40` — the stratified split (MP1's routine, generalised to 5 folds).
+2. `components/mp2-py/csc869/cv.py:62` — resample, fit preprocessor, transform validation, in that order.
 3. `components/mp2-rust/src/main.rs:194` — the same loop in Rust, same seeds, same folds.
 
-Full map with the lines to point at: `docs/presentation-guide.md` §7.
+Full map with the lines to point at: `docs/presentation-guide.md` §7. Live-demo commands:
+`docs/demo-runbook.md`.

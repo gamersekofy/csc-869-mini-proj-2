@@ -213,7 +213,7 @@ scores #text(fill: red)[0.759] accuracy and #text(fill: red)[0 F1].]
       #v(2pt)
       - Highest mean CV F1: #text(weight: "bold")[0.6905]
       - PR-AUC #text(weight: "bold")[0.7479] as tie-breaker
-      - 1.69 s full-train fit — cheap to retrain
+      - 16 s full-train fit on 49,440 rows — cheap to retrain
       - Test: precision 0.6661 / recall 0.6784
     ],
     [
