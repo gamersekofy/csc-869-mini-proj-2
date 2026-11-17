@@ -1,0 +1,15 @@
+column,dtype,n_missing,pct_missing
+age,numeric,0,0.0
+workclass,categorical,963,5.914870093974572
+fnlwgt,numeric,0,0.0
+education,categorical,0,0.0
+education-num,numeric,0,0.0
+marital-status,categorical,0,0.0
+occupation,categorical,966,5.933296480560162
+relationship,categorical,0,0.0
+race,categorical,0,0.0
+sex,categorical,0,0.0
+capital-gain,numeric,0,0.0
+capital-loss,numeric,0,0.0
+hours-per-week,numeric,0,0.0
+native-country,categorical,274,1.6829433081506049

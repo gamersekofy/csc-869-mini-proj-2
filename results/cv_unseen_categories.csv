@@ -1,0 +1,5 @@
+lang,scenario,fold,column,n_unseen
+python,none,4,native-country,1
+python,upsampling,4,native-country,1
+python,downsampling,0,workclass,1
+python,downsampling,4,native-country,1

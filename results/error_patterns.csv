@@ -1,0 +1,10 @@
+scenario,pattern,count,denominator,rate,note
+none,high_capital_gain_low_hours,0,22,0.0,all five models wrong; capital-gain > 0 and hours-per-week < 40
+none,mid_education_band_9_13,20,22,0.9090909090909091,all five models wrong; education-num between 9 and 13
+none,false_positives_dominate,0,5,0.0,models on which FP > FN
+upsampling,high_capital_gain_low_hours,0,9,0.0,all five models wrong; capital-gain > 0 and hours-per-week < 40
+upsampling,mid_education_band_9_13,8,9,0.8888888888888888,all five models wrong; education-num between 9 and 13
+upsampling,false_positives_dominate,5,5,1.0,models on which FP > FN
+downsampling,high_capital_gain_low_hours,0,17,0.0,all five models wrong; capital-gain > 0 and hours-per-week < 40
+downsampling,mid_education_band_9_13,15,17,0.8823529411764706,all five models wrong; education-num between 9 and 13
+downsampling,false_positives_dominate,5,5,1.0,models on which FP > FN

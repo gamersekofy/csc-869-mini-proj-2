@@ -1,0 +1,25 @@
+region,count,scenario
+tree-based (DT+RF) only,2,none
+linear (LogReg+SVM) only,5,none
+instance-based (KNN) only,11,none
+tree-based (DT+RF) & linear (LogReg+SVM) only,3,none
+tree-based (DT+RF) & instance-based (KNN) only,5,none
+linear (LogReg+SVM) & instance-based (KNN) only,2,none
+all three wrong,22,none
+at least one family wrong,50,none
+tree-based (DT+RF) only,9,upsampling
+linear (LogReg+SVM) only,3,upsampling
+instance-based (KNN) only,21,upsampling
+tree-based (DT+RF) & linear (LogReg+SVM) only,4,upsampling
+tree-based (DT+RF) & instance-based (KNN) only,5,upsampling
+linear (LogReg+SVM) & instance-based (KNN) only,6,upsampling
+all three wrong,9,upsampling
+at least one family wrong,57,upsampling
+tree-based (DT+RF) only,1,downsampling
+linear (LogReg+SVM) only,4,downsampling
+instance-based (KNN) only,18,downsampling
+tree-based (DT+RF) & linear (LogReg+SVM) only,0,downsampling
+tree-based (DT+RF) & instance-based (KNN) only,3,downsampling
+linear (LogReg+SVM) & instance-based (KNN) only,3,downsampling
+all three wrong,17,downsampling
+at least one family wrong,46,downsampling

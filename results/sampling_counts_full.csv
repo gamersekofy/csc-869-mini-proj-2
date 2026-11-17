@@ -1,0 +1,4 @@
+lang,scenario,n_before,pos_before,neg_before,n_after,pos_after,neg_after,positive_rate_after
+python,none,32561,7841,24720,32561,7841,24720,0.2408095574460244
+python,upsampling,32561,7841,24720,49440,24720,24720,0.5
+python,downsampling,32561,7841,24720,15682,7841,7841,0.5
