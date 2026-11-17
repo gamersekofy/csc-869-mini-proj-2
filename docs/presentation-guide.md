@@ -96,13 +96,18 @@ code alive and builds a comparison study around it.
 | CV | hand-written k-fold | same hand-written routine, generalised to 5 folds, **frozen to `folds.json`** |
 | Imbalance | not addressed | three sampling scenarios, resampling inside the fold only |
 | Evaluation depth | CV score | CV + full test set + CV-vs-test deltas + learning curves + error analysis |
-| Implementations | Python | Python **and** native Rust, differential-tested |
+| Implementations | Python **and** native Rust (naive Bayes in both) | Python **and** native Rust, five models, differential-tested |
 | Output | results | results + recommendation + 6-page typeset report generated from the CSVs |
 
 Why the NBC is still there: the attached rubric is the MP1 rubric carried over, and it still
 awards 30 points for a Naive Bayes implementation (20) and k-fold CV (10). The module lives in
 `components/mp2-py/csc869/legacy/` and still runs on the cleaned data: **10-fold accuracy
 0.8334 ± 0.0052**, inside the MP1 sanity band of 81–84%.
+
+MP1 already shipped the same two implementations — the naive Bayes in Python and in Rust
+(`github.com/gamersekofy/naive-bayes-classifier`) — so "two languages, one answer" is inherited, not
+invented for this project. What changed is scale and purpose: one classifier in both languages then,
+five classifiers plus a sampling matrix now.
 
 The one honest difference in framing: MP1 asked "can you implement the algorithm"; MP2 asks
 "can you design an experiment that answers a question".

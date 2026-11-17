@@ -10,8 +10,9 @@ Each slide opens with **On screen:** — that is your cue for what to point at, 
 follows refers to it. Don't read numbers off a slide that aren't in this script; every figure traces
 to `results/cv_summary.csv`, `results/test_metrics.csv` or the error-analysis CSVs.
 
-Rehearse once out loud with a timer. The per-slide clock below is computed at 145 wpm; if you're
-running long before slide 6, the cut list at the bottom is your friend.
+Rehearse once out loud with a timer. The per-slide clock is computed at 145 wpm from the word count
+and lands at 6:53, so there are 7 seconds of slack before the hard stop. If you're behind at slide 6,
+use the cut list at the bottom.
 
 ---
 
@@ -25,12 +26,12 @@ running long before slide 6, the cut list at the bottom is your friend.
 
 ---
 
-## 2 · Accuracy lies — 0:17–0:54 (37 s)
+## 2 · Accuracy lies — 0:17–0:53 (36 s)
 
 **On screen:** four stat lines and the class-balance bar chart on the left, the 0.759 callout on the right.
 
 > Adult, same census data as MP1: 32,561 training rows, 16,281 test, and a quarter of them earning
-> over 50K — the short bar in that chart.
+> over 50K — the short bar there.
 >
 > Here's the trap that shaped everything. Predict "under 50K" for everybody and you score 0.759
 > accuracy — seventy-six percent — with an F1 of exactly zero.
@@ -41,7 +42,7 @@ running long before slide 6, the cut list at the bottom is your friend.
 
 ---
 
-## 3 · Pipeline — 0:54–1:35 (41 s)
+## 3 · Pipeline — 0:53–1:34 (41 s)
 
 **On screen:** five boxes, left to right.
 
@@ -59,7 +60,7 @@ running long before slide 6, the cut list at the bottom is your friend.
 
 ---
 
-## 4 · Methods — 1:35–2:14 (39 s)
+## 4 · Methods — 1:34–2:13 (39 s)
 
 **On screen:** models on the left, scenarios on the right, the 75-fits line underneath.
 
@@ -76,7 +77,7 @@ running long before slide 6, the cut list at the bottom is your friend.
 
 ---
 
-## 5 · Headline result — 2:14–2:48 (34 s)
+## 5 · Headline result — 2:13–2:47 (34 s)
 
 **On screen:** the three-row table on the left, "what actually matters" on the right.
 
@@ -91,18 +92,18 @@ running long before slide 6, the cut list at the bottom is your friend.
 
 ---
 
-## 6 · The matrix — 2:48–3:03 (15 s)
+## 6 · The matrix — 2:47–3:02 (15 s)
 
 **On screen:** the 5 × 3 heatmap.
 
-> Same fifteen cells as a picture. Don't read every number — read the shape. KNN is the pale row in
-> all three scenarios; everything else sits in a narrow band.
+> The same fifteen cells, as a picture. Don't read every number — read the shape. KNN is the pale
+> row in all three scenarios; everything else sits in a narrow band.
 >
 > **The narrow band is the result.**
 
 ---
 
-## 7 · ROC and PR — 3:03–3:32 (29 s)
+## 7 · ROC and PR — 3:02–3:31 (29 s)
 
 **On screen:** ROC on top, PR underneath, one caption.
 
@@ -118,7 +119,7 @@ running long before slide 6, the cut list at the bottom is your friend.
 
 ---
 
-## 8 · Learning curves — 3:32–3:48 (16 s)
+## 8 · Learning curves — 3:31–3:47 (16 s)
 
 **On screen:** three panels of F1 against training fraction.
 
@@ -130,7 +131,7 @@ running long before slide 6, the cut list at the bottom is your friend.
 
 ---
 
-## 9 · Test set — 3:48–4:21 (33 s)
+## 9 · Test set — 3:47–4:20 (33 s)
 
 **On screen:** five-row table on the left, delta note on the right.
 
@@ -144,7 +145,7 @@ running long before slide 6, the cut list at the bottom is your friend.
 
 ---
 
-## 10 · Where the errors live — 4:21–4:59 (38 s)
+## 10 · Where the errors live — 4:20–4:58 (38 s)
 
 **On screen:** Venn on the left, pairwise agreement matrix on the right.
 
@@ -155,11 +156,11 @@ running long before slide 6, the cut list at the bottom is your friend.
 > threshold problem — a model with no near neighbour to lean on.**
 >
 > And the hard cases have a shape: education-num 9 to 13 covers 91, 89 and 88 per cent of the
-> all-wrong records. Mid-education, not the zero-capital-gain group I expected.
+> all-wrong records — mid-education, not the capital-gain group I expected.
 
 ---
 
-## 11 · Recommendation — 4:59–5:38 (39 s)
+## 11 · Recommendation — 4:58–5:37 (39 s)
 
 **On screen:** "Why" on the left, "Failure mode" on the right.
 
@@ -178,23 +179,24 @@ F1 and lower precision at 0.5. Pick it only for a ranking system.]
 
 ---
 
-## 12 · Two languages, one answer — 5:38–6:21 (43 s)
+## 12 · Two languages, one answer — 5:37–6:24 (47 s)
 
 **On screen:** the delta table on the left, "why the residual exists" on the right.
 
-> All of this also runs as native Rust: same fold file, same resample seeds, same metric code. That
-> discipline came out of MP1 — if two implementations disagree, find out why before trusting a number.
+> All of this also runs as native Rust: same fold file, same resample seeds, same metric code. MP1
+> shipped the same pair — one classifier, both languages — so this is that discipline at five times
+> the scale: **when the two disagree, find out why before trusting a number.**
 >
 > On the quick protocol — 8,000 rows, two folds — kNN agrees to one part in ten to the sixteenth and
-> SVM matches on F1. Logistic regression is out by 0.0003, the tree by about a thousandth, random
-> forest by 0.011 on fold means — per-tree bootstrap randomness, not pipeline.
+> SVM matches on F1. Logistic is out by 0.0003, the tree by a thousandth, random forest by 0.011 —
+> per-tree bootstrap randomness, not pipeline.
 >
 > **If two implementations agree cell by cell, the pipeline isn't an explanation for any result I
 > just showed you.**
 
 ---
 
-## 13 · Cost and close — 6:21–6:50 (29 s)
+## 13 · Cost and close — 6:24–6:53 (29 s)
 
 **On screen:** Python column, Rust column, closing line.
 
@@ -213,15 +215,15 @@ Glance at the slide number, not a clock.
 
 | Clock | Should be finishing | If you're past this |
 |---|---|---|
-| 0:54 | slide 2 | drop the ROC-AUC sentence |
-| 1:35 | slide 3 | drop the `adult.test` cleaning detail |
-| 2:14 | slide 4 | drop the Naive Bayes line |
-| 2:48 | slide 5 | cut the FN/FP numbers, keep "one point" |
-| 3:32 | slide 7 | slide 6 is skippable in a pinch |
-| 4:21 | slide 9 | cut the precision/recall reading |
-| 4:59 | slide 10 | cut the education-num detail |
-| 5:38 | slide 11 | shorten next steps to "calibration, then class weights" |
-| 6:50 | slide 13 (script ends; 10 s of slack to 7:00) | — |
+| 0:53 | slide 2 | drop the ROC-AUC sentence |
+| 1:34 | slide 3 | drop the `adult.test` cleaning detail |
+| 2:13 | slide 4 | drop the Naive Bayes line |
+| 2:47 | slide 5 | cut the FN/FP numbers, keep "one point" |
+| 3:31 | slide 7 | slide 6 is skippable in a pinch |
+| 4:20 | slide 9 | cut the precision/recall reading |
+| 4:58 | slide 10 | cut the education-num detail |
+| 5:37 | slide 11 | shorten next steps to "calibration, then class weights" |
+| 6:53 | slide 13 (script ends; 7 s of slack to 7:00) | — |
 
 **Running long — cut in this order:** slide 8 entirely → the education-num sentence on 10 → the
 FN/FP trade on 5 → the failure-mode paragraph on 11. About 40 seconds, and the argument survives.
