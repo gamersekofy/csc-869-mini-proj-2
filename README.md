@@ -75,6 +75,9 @@ data/
   folds.json           # frozen 5-fold split, shared with Rust
 results/               # generated CSVs
 reports/figures/       # generated 300-dpi figures
+reports/figures/dark/  # Mocha-recoloured copies used by the deck (tools/dark_figures.py)
+docs/                  # execution plan + presentation guide (talk script, code map, FAQ)
+tools/dark_figures.py  # rebuild reports/figures/dark/ from the light figures
 ```
 
 ## Setup
@@ -189,6 +192,8 @@ The quick profile runs in ~1–2 minutes.
 | `reports/report.md` | Generated Markdown report with every table and figure. |
 | `reports/report.typ` | Generated Typst source (same numbers, print layout). |
 | `reports/report.pdf` | Typeset report compiled by Typst: title page, contents, 6 numbered body pages. |
+| `reports/slides.pdf` | 13-slide 16:9 deck; `slides.typ` is hand-written, `slides_notes.md` is the 5-minute cue card. |
+| `docs/presentation-guide.md` | Talk script, "where is X" code tour with file:line refs, and FAQ. |
 
 ## Design notes / traps avoided
 

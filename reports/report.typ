@@ -31,7 +31,7 @@
   #v(0.5cm)
   #text(size: 11pt)[San Francisco State University]
   #v(2.2cm)
-  #text(size: 11pt)[Python reference implementation]
+  #text(size: 11pt)[Python and native Rust implementations]
   #v(0.4cm)
   #text(size: 11pt)[2026-11-01]
   #v(1.2cm)
@@ -73,7 +73,7 @@
 
 = Problem and data
 
-The task is binary income prediction on the UCI Adult data: *24.08%* of the 32,561 training rows earn more than 50K, so a constant `<=50K` predictor already scores *75.92%* accuracy while finding zero positive cases. Every result below therefore leads with F1 and PR-AUC, reports mean ± standard deviation over five frozen folds, and compares three sampling scenarios (none, upsampling, downsampling) for five classifiers. The Python component is the reference implementation; the Rust component is expected to read the same `data/folds.json` and emit the same tidy schema.
+The task is binary income prediction on the UCI Adult data: *24.08%* of the 32,561 training rows earn more than 50K, so a constant `<=50K` predictor already scores *75.92%* accuracy while finding zero positive cases. Every result below therefore leads with F1 and PR-AUC, reports mean ± standard deviation over five frozen folds, and compares three sampling scenarios (none, upsampling, downsampling) for five classifiers. The Python component is the reference implementation; the native Rust component reads the same `data/folds.json`, resamples with the same seeds, and emits the same tidy schema.
 
 #quote(block: true)[
   *Why accuracy is the wrong headline* A constant `<=50K` classifier scores 75.92% accuracy and F1 = 0. The best no-resampling models score about 0.85 accuracy but only 0.66–0.68 F1, so the ranking that matters is F1 / PR-AUC.
@@ -159,18 +159,35 @@ Mode imputation edges out the explicit `unknown` level by about 0.001 F1; the nu
   ],
 )
 
-```python
+#show raw: set text(size: 6.6pt)
+#grid(columns: (1fr, 1fr), gutter: 5pt,
+  [
+    ```python
 # csc869/cv.py -- one (scenario, fold) slice
-res_idx, _ = resample_indices(y_train, scenario, seed=scenario_seed)
-X_res = X_train_raw.iloc[res_idx].reset_index(drop=True)
-pre = Preprocessor(categorical=cfg["missing"]["categorical"],
-                   numeric=cfg["missing"]["numeric"])
-X_res_p = pre.fit_transform(X_res)   # fit on resampled rows only
-X_val_p = pre.transform(X_val_raw)   # validation rows are never resampled
-model, _ = fit_model(model_name, X_res_p, y_res, seed=model_seed)
-metrics = compute_metrics(y_val, model.predict(X_val_p),
-                          predict_scores(model, X_val_p))
-```
+idx, _ = resample_indices(y_train, scenario, seed=s)
+pre = Preprocessor(categorical=cat, numeric=num)
+X_res = pre.fit_transform(X_train.iloc[idx])  # train only
+X_val = pre.transform(X_val_raw)  # never resampled
+model, _ = fit_model(name, X_res, y_res, seed=s)
+m = compute_metrics(y_val, model.predict(X_val),
+                    predict_scores(model, X_val))
+    ```
+  ],
+  [
+    ```rust
+// components/mp2-rust/src/main.rs -- same slice
+let rel = rng::resample(&y, scenario, seed);
+let idx: Vec<_> = rel.iter().map(|&i| tr[i]).collect();
+let yr = yy(&train, &idx);
+let pre = Preprocessor::fit(&train, &idx, /* cfg */);
+let x = pre.transform(&train, &idx); // train only
+let z = pre.transform(&train, va);   // never resampled
+let m = metrics::compute(&yv, &pred, &score);
+    ```
+  ],
+)
+
+*Cross-language check.* The Rust binary reads the same #raw("data/folds.json"), resamples train rows with the same seeds, and emits the same tidy schema. On the quick protocol (first 8,000 rows, two projected folds) kNN agrees to #raw("1e-16"), logistic regression and SVM to at most #raw("5e-4") F1, the decision tree to about #raw("1e-3"), and the random forest to at most #raw("0.018") PR-AUC -- the residual is per-tree RNG streams, not a fold or preprocessing mismatch.
 
 *MP1 carry-forward.* The from-scratch mixed Naive Bayes, stratified k-fold and metrics modules still run on the cleaned data: 10-fold accuracy *0.8334 ± 0.0052*.
 
@@ -757,20 +774,10 @@ models: [decision_tree, random_forest, logistic_regression, svm, knn]
 missing: {categorical: unknown, numeric: indicator}
 ```
 
-Run the full pipeline from the repository root:
-
-```bash
-nix develop
-cd components/mp2-py
-python -m csc869.data --check
-python -m csc869.run --config configs/main.yaml --out results/ --jobs 4
-typst compile --root ../.. reports/report.typ reports/report.pdf
-```
-
-The full matrix takes about 20–40 minutes with `--jobs 4` on a modern laptop; the quick profile (`--quick`) finishes in about 1.5 minutes and writes to separate `results_quick/` and `reports/figures_quick/` paths. Figures are 300-dpi PNGs under `reports/figures/`; the Markdown source is `reports/report.md`.
+Both implementations consume the same `folds.json` and emit the same tidy CSV schema, so the two tracks are comparable cell by cell. On the hardware used here ($8$ cores, four parallel workers) the full $450$-cell Python matrix takes roughly 20–40 minutes, of which one CV stage alone accounts for 23 minutes; the quick parity protocol finishes in about 1.5 minutes. The Rust binary runs that protocol in 113.7 s, a factor of (3.0), so a full $450$-cell Rust sweep extrapolates to roughly 8–14 minutes — a run rather than a port. That sweep was not executed, and no Rust figure is claimed beyond the quick protocol.
 
 #quote(block: true)[
-  *Limitations* The error analysis uses a single 200-record sample, so its counts carry sampling uncertainty; Random Forest and SVM keep mostly default hyperparameters; SMOTE/ADASYN and gradient boosting were left as next steps; and the Rust comparison is pending. The full EDA and curve set lives in `reports/figures/` and `reports/report.md`, which this 6-page summary deliberately compresses.
+  *Limitations* The error analysis uses a single 200-record sample, so its counts carry sampling uncertainty; Random Forest and SVM keep mostly default hyperparameters; SMOTE/ADASYN and gradient boosting were left as next steps; and the cross-language check runs on the quick parity protocol rather than a full 450-cell Rust sweep. The full EDA and curve set lives in `reports/figures/` and `reports/report.md`, which this 6-page summary deliberately compresses.
 ]
 
 #context [#metadata(counter(page).final().first()) <pagecount>]
