@@ -185,8 +185,8 @@ streams, not a fold or preprocessing mismatch.
 |---|---|
 | Full Python matrix (450 values) | ≈ 20–40 min, `--jobs 4`; CV stage alone 1,375.8 s measured |
 | Quick parity protocol, Python | 337.9 s |
-| Quick parity protocol, Rust | 113.7 s (**3.0×**) |
-| Full Rust matrix | **extrapolated ≈ 8–14 min, not run** |
+| Quick parity protocol, Rust | 20.9 s measured on the presentation laptop (54 s on this Gateway box under load) |
+| Full Rust matrix | **12 min 44 s (763.7 s) measured** on the presentation laptop, CV + test end to end |
 | Slowest single fit | SVM on the full training set: 603 s (Platt calibration adds 3 inner fits) |
 
 **Error analysis (200-record test sample: 100 positives, 100 negatives)**

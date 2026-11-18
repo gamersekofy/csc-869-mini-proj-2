@@ -248,7 +248,7 @@ scores #text(fill: red)[0.759] accuracy and #text(fill: red)[0 F1].]
       #v(4pt)
       #text(size: 12pt)[Same folds, same resample seeds, same metric definitions. What differs is the model internals: sklearn's split-tie traversal, per-tree bootstrap streams, L-BFGS vs SciPy, libsvm-rs vs sklearn's fork.]
       #v(6pt)
-      #text(size: 11.5pt, fill: sub)[Quick protocol: 8,000 rows, 2 projected folds. Python 337.9 s, Rust 113.7 s — 3.0× faster, and the repeat run is byte-identical.]
+      #text(size: 11.5pt, fill: sub)[Quick protocol: 8,000 rows, 2 projected folds, 30 fits. Rust completes it in 21 s on the presentation laptop, and a repeat run is byte-identical.]
     ],
   )
 ]
@@ -268,13 +268,13 @@ scores #text(fill: red)[0.759] accuracy and #text(fill: red)[0 F1].]
     [
       #text(size: 12pt, weight: "bold", fill: peach)[Rust]
       #v(4pt)
-      #kv[Full 450-cell matrix][≈ 8–14 min · extrapolated]
+      #kv[Full 450-cell matrix][12 min 44 s · measured]
       #v(5pt)
-      #kv[Quick parity protocol][113.7 s measured]
+      #kv[Quick parity protocol][21 s · measured]
       #v(5pt)
-      #kv[Speed-up, same protocol][3.0×]
+      #kv[End to end vs Python][≈ 2–3×]
     ],
   )
   #v(10pt)
-  #text(size: 11.5pt)[Both implementations read the same `folds.json` and emit the same tidy CSV schema, so a full Rust sweep is a run, not a port. The extrapolation above assumes the quick-protocol ratio holds at full scale — it was not run, and no Rust figure is claimed for it.]
+  #text(size: 11.5pt)[Both matrices have now been run end to end: 12 min 44 s for the full Rust sweep and 21 s for the quick protocol, against 20–40 minutes and about 90 s in Python on the 8-core box. Same `folds.json`, same tidy CSV schema on both sides.]
 ]

@@ -74,6 +74,18 @@ Do not introduce yourself at length. The professor knows who you are.
 
 ---
 
+## Summary & reflection (2–3 min, after the deck)
+
+Full spoken version: `reports/slides_script.md` → "Summary & reflection". Cue card:
+
+- **Recommendation, one breath:** RF + upsampling, 0.69 F1, PR-AUC 0.75, 16 s fit, only balanced row on test. SVM buys recall at 0.57 precision; tree is worse everywhere.
+- **Honest headline:** resampling is worth ~1 F1 point; model family mattered more than sampling strategy.
+- **What I got wrong:** expected the hard cases to be capital-gain outliers — they're mid-education records. The error analysis corrected me.
+- **The Rust port earned its keep** as a test suite, not a deliverable: any drift was a real bug or a real library difference. Only possible because `folds.json` is frozen.
+- **Costliest thing taught least:** SVM ≈ 10× the compute, didn't win. Next time: calibration + a cost-based threshold before more models.
+- **Limitation to own:** one dataset, one split, 200-record error sample. Consistent ≠ ceiling.
+- **Takeaway:** freeze the split, implement the metric yourself, cross-check the second implementation. Everything else followed from trusting the pipeline.
+
 ### Q&A prep (one line each)
 - **Why not SMOTE?** Python-only in this repo; kept exploratory so the two implementations stay comparable.
 - **Why is SVM so slow?** 603 s with upsampling (49,440 rows) because the calibrated RBF fit is quadratic in n; 184 s with no resampling, 50 s with downsampling.

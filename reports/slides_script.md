@@ -191,11 +191,52 @@ the talk proper ends at 7:00 on slide 12, and slide 13 is optional cost detail.
 [Optional buffer slide — the talk has already ended on the previous line. Use it only if you're ahead.]
 
 > Cost, quickly: twenty to forty minutes for the full Python matrix, ninety seconds for the quick one.
-> Rust does the quick one in 114 seconds, so three times faster, and at full scale that'd be around
-> eight to fourteen minutes, though I didn't run that one.
+> Rust does the full matrix in twelve minutes forty-four, and the quick one in twenty-one seconds. So
+> roughly two to three times faster end to end, depending on the machine.
 >
 > So: same data as MP1, one fold file, two implementations, and resampling is worth about one point,
 > not twenty.
+
+---
+
+## Summary & reflection — after the deck (2–3 min, ~370 words)
+
+[Brief says 2–3 minutes, separate from the 7-minute talk. No slides needed; stay on slide 12 or 13,
+or black the screen. Speak slower than in the talk — this part is assessed on reflection, not speed.]
+
+> Okay, the recommendation in one breath. If I had to ship one thing out of this project it's the
+> random forest trained on upsampled data, and the reason is a little unsatisfying: it's the best of a
+> fairly flat set. 0.69 F1, PR-AUC 0.75, sixteen seconds to retrain, and on the test set it's the one
+> model that isn't lopsided between precision and recall. The rest all cost you something. The SVM
+> buys you recall at 0.57 precision, and the tree is just worse everywhere.
+>
+> But the honest summary is that resampling isn't the lever people think it is. One point of F1 across
+> three scenarios, and the model family mattered more than the sampling strategy did.
+>
+> What I'd actually reflect on is what I got wrong, because that's where the learning was. I assumed
+> the hard cases would be the capital-gain outliers. They aren't — they're mid-education records that
+> look genuinely ambiguous, and the error analysis is what corrected me.
+>
+> Second thing: the two implementations turned out to be far more useful than I expected. I treated
+> the Rust port as a deliverable, but it worked like a test suite. Anything that drifted between the
+> two was either a real bug or a real library difference, and there's no way to hand-wave past that.
+> That only works because the fold file is frozen and both sides read it.
+>
+> Third: the thing that costs the most time taught me the least. The SVM was roughly ten times the
+> compute of everything else and it didn't win. Doing this again I'd spend that time on calibration
+> and on choosing a threshold from an actual cost, because a 0.5 cut on an uncalibrated forest isn't a
+> decision anybody should ship.
+>
+> The limitation I'd own is scope. One dataset, one split, a two-hundred-record error sample. The
+> story is consistent — fifteen test cells all within 0.017 of their CV numbers — but that's evidence
+> of no leakage, not evidence that 0.69 is the ceiling for this problem.
+>
+> And the thing I'm taking from MP1 into whatever comes next is the boring discipline: freeze the
+> split, implement the metric yourself, and check the second implementation against the first.
+> Everything interesting in this project came from being able to trust the pipeline.
+
+[If he asks what you'd do with another month: gradient boosting and calibration first, then a proper
+cost model for the threshold — not more resampling variations.]
 
 ---
 
