@@ -226,3 +226,51 @@ numerics get an indicator column), or on slide 9 mention that the recommendation
 3. `components/mp2-rust/src/main.rs:194` — same loop in Rust, same seeds, same folds.
 
 Full map: `docs/presentation-guide.md` §7. Live-demo commands: `docs/demo-runbook.md`.
+
+---
+
+# Part 2 · Summary and reflection — 2:40 (separate segment)
+
+[No slide needed, or leave the recommendation slide up. Speak slower than in the talk: this is the
+part where the professor is judging whether you understood what you did.]
+
+> So, to pull it together. My recommendation is random forest with upsampling, and the honest version
+> of why is that it was the best of a fairly flat set. 0.6905 mean CV F1, PR-AUC 0.7479, sixteen
+> seconds to retrain, and the only balanced point on the test set. If I were actually deploying this
+> I'd ship it with a recalibrated threshold rather than at 0.5, because its probabilities aren't
+> trustworthy as they come out.
+>
+> What I didn't expect is how little the resampling mattered. I went in assuming it was the lever.
+> It's worth about one F1 point, and the model family moves the number more than the sampling strategy
+> does. The hard cases weren't where I predicted either — I expected zero capital gain to be the
+> trouble, and it turned out to be people in the middle of the education scale, which honestly makes
+> sense once you see it: that's where "over 50K" is genuinely ambiguous.
+>
+> Three things I'd keep from this project. Freezing the folds to a file once, so both languages read
+> the identical split — that's the cheapest insurance in the whole thing, and without it the
+> cross-language check would be decoration. Generating the report from the result CSVs instead of
+> typing numbers into it, so when I doubted a figure I could go and check it in a minute. And keeping
+> MP1's naive Bayes in the repo as a regression test: it still scores 0.833 on ten-fold, so I know the
+> cleaning never moved underneath the analysis.
+>
+> What I'd do differently: I under-budgeted the SVM badly. Six hundred seconds for one calibrated fit
+> with upsampling, and it wasn't meaningfully better than the forest — so a lot of compute bought
+> nothing. Next time I'd run the cheap models across the whole matrix first and only then spend on the
+> expensive one. I'd also have started with class weights rather than resampling, because it's the
+> cheaper lever and I still don't know how it compares.
+>
+> The bigger thing I take away is that the metric decided the story. On accuracy everything looks fine
+> and the minority class is invisible. On ROC-AUC everything looks the same. Only F1 and PR-AUC
+> separated these models, and even then by about a point. So the lesson isn't really "upsample your
+> data" — it's that on an imbalanced problem you have to choose the metric before you run anything,
+> because it's going to decide what you conclude.
+>
+> And MP1 to MP2 was mostly a change in what I was being asked to do: build the algorithm, then design
+> an experiment about it. The second one is harder, and it's the part I'd want to do again.
+
+[Tone: no apology, no "sorry this is simple". State the recommendation, state what surprised you,
+state what you'd change. Then stop.]
+
+**If you need 2:00 instead of 2:40:** cut the third paragraph (the three things you'd keep) to one
+sentence — "freezing the folds to a file and generating the report from the CSVs are the two habits I'd
+keep" — and drop the ROC-AUC sentence in the last paragraph.
